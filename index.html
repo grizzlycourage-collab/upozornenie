@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grizzly Courage - Archívny Kód</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #0b0c10;
+            color: #c5c6c7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1200px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            color: #66fcf1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
+        }
+        .scene {
+            width: 100%;
+            height: 65vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            cursor: grab;
+        }
+        .scene:active { cursor: grabbing; }
+        .carousel {
+            position: relative;
+            width: 300px;
+            height: 450px;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+        .carousel-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            transform-style: preserve-3d;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px rgba(102, 252, 241, 0.2);
+            border: 2px solid rgba(102, 252, 241, 0.3);
+            background: #1f2833;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+        .instructions {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #8892b0;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Archívny Kód [Σ]</h1>
+
+    <div class="scene" id="scene">
+        <div class="carousel" id="carousel">
+            <div class="carousel-item"><img src="Gemini_Generated_Image_dsjx3ydsjx3ydsjx.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_jlm641jlm641jlm6.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_osjvs6osjvs6osjv.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_qvas10qvas10qvas.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_r5er3or5er3or5er.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_t1mo3t1mo3t1mo3t.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_u86bz5u86bz5u86b.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_1lrb1x1lrb1x1lrb.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_2rvy8c2rvy8c2rvy.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_8nw70a8nw70a8nw7.jpeg" alt="Archív"></div>
+            <div class="carousel-item"><img src="Gemini_Generated_Image_8rha908rha908rha.jpeg" alt="Archív"></div>
+        </div>
+    </div>
+
+    <div class="instructions">Potiahni prstom alebo myšou do strán / hore a dolu pre rotáciu [Σ]</div>
+
+    <script>
+        const carousel = document.getElementById('carousel');
+        const items = document.querySelectorAll('.carousel-item');
+        const itemCount = items.length;
+        const radius = 450;
+        let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
+
+        function updateCarouselLayout() {
+            items.forEach((item, index) => {
+                const theta = (index / itemCount) * 2 * Math.PI;
+                const x = Math.sin(theta) * radius;
+                const z = Math.cos(theta) * radius;
+                const rotY = (index / itemCount) * 360;
+                item.style.transform = `translate3d(${x}px, 0, ${z}px) rotateY(${rotY}deg)`;
+            });
+        }
+        updateCarouselLayout();
+
+        let isDragging = false, startX = 0, startY = 0;
+
+        function dragStart(e) {
+            isDragging = true;
+            startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            startY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+        }
+
+        function dragMove(e) {
+            if (!isDragging) return;
+            const cx = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            const cy = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+            targetX += (cx - startX) * 0.5;
+            targetY -= (cy - startY) * 0.3;
+            startX = cx; startY = cy;
+        }
+
+        function dragEnd() { isDragging = false; }
+
+        window.addEventListener('mousedown', dragStart);
+        window.addEventListener('mousemove', dragMove);
+        window.addEventListener('mouseup', dragEnd);
+        window.addEventListener('touchstart', dragStart);
+        window.addEventListener('touchmove', dragMove);
+        window.addEventListener('touchend', dragEnd);
+
+        function animate() {
+            currentX += (targetX - currentX) * 0.1;
+            currentY += (targetY - currentY) * 0.1;
+            currentY = Math.max(-45, Math.min(45, currentY));
+            carousel.style.transform = `rotateX(${-currentY}deg) rotateY(${currentX}deg)`;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
