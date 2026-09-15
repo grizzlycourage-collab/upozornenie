@@ -16,20 +16,20 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            perspective: 1400px;
+            perspective: 1800px;
         }
         h1 {
-            font-size: 1.6rem;
-            letter-spacing: 4px;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
             color: #66fcf1;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-transform: uppercase;
             text-align: center;
-            text-shadow: 0 0 12px rgba(102, 252, 241, 0.5);
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
         }
         .scene {
             width: 100%;
-            height: 70vh;
+            height: 65vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -39,8 +39,8 @@
         .scene:active { cursor: grabbing; }
         .carousel {
             position: relative;
-            width: 280px;
-            height: 420px;
+            width: 260px;
+            height: 390px;
             transform-style: preserve-3d;
             transition: transform 0.1s ease-out;
         }
@@ -51,12 +51,13 @@
             left: 0;
             top: 0;
             transform-style: preserve-3d;
-            border-radius: 14px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 25px rgba(102, 252, 241, 0.25);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(102, 252, 241, 0.2);
             border: 2px solid rgba(102, 252, 241, 0.4);
             background: #1f2833;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
         .carousel-item img {
             width: 100%;
@@ -65,12 +66,11 @@
             pointer-events: none;
         }
         .instructions {
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 0.85rem;
             color: #8892b0;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             text-align: center;
-            text-transform: uppercase;
         }
     </style>
 </head>
@@ -94,15 +94,15 @@
         </div>
     </div>
 
-    <div class="instructions">Potiahni prstom alebo myšou pre rotáciu [Σ]</div>
+    <div class="instructions">Potiahni prstom alebo myšou do strán / hore a dolu pre rotáciu [Σ]</div>
 
     <script>
         const carousel = document.getElementById('carousel');
         const items = document.querySelectorAll('.carousel-item');
         const itemCount = items.length;
         
-        // Zväčšený polomer kruhu pre väčšie rozostupy medzi tabuľami, aby sa rohy neprekrývali
-        const radius = 620; 
+        // Zväčšený polomer na 750px pre dokonalý rozostup 11 prvkov bez kolízie rohov
+        const radius = 750;
 
         let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
 
@@ -130,7 +130,7 @@
             const cx = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
             const cy = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
             targetX += (cx - startX) * 0.4;
-            targetY -= (cy - startY) * 0.25;
+            targetY -= (cy - startY) * 0.2;
             startX = cx; startY = cy;
         }
 
@@ -146,7 +146,7 @@
         function animate() {
             currentX += (targetX - currentX) * 0.1;
             currentY += (targetY - currentY) * 0.1;
-            currentY = Math.max(-35, Math.min(35, currentY));
+            currentY = Math.max(-30, Math.min(30, currentY));
             carousel.style.transform = `rotateX(${-currentY}deg) rotateY(${currentX}deg)`;
             requestAnimationFrame(animate);
         }
